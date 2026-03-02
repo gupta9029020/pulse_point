@@ -1,0 +1,80 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:#f5f7fb;
+}
+.center-page{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.profile-card{
+    width:600px;
+}
+.card-body{padding:15px;}
+h2{margin-bottom:10px;}
+h5{margin-bottom:6px;}
+p{margin-bottom:4px;}
+hr{margin:10px 0;}
+.back-btn{
+    position:absolute;
+    top:25px;
+    right:40px;
+}
+</style>
+
+<div class="back-btn">
+    <a href="/doctor/" class="btn btn-outline-secondary btn-sm">← Back</a>
+</div>
+
+<div class="center-page">
+    <div class="profile-card">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h2>Doctor Profile</h2>
+
+                {% if doctor.profile_photo %}
+                <img src="{{ doctor.profile_photo.url }}" class="rounded-circle mb-2 border" width="110" height="110" style="object-fit:cover">
+                {% else %}
+                <div class="mb-2">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width:110px;height:110px;font-size:30px">
+                        {{ doctor.user.username|first|upper }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <hr>
+
+                <div class="text-start">
+
+                    <h5 class="text-primary">Professional Information</h5>
+                    <p><strong>Full Name:</strong> {{ doctor.user.get_full_name}}</p>
+                    <p><strong>Doctor ID:</strong> {{ doctor.doctor_id }}</p>
+                    <p><strong>Specialization:</strong> {{ doctor.specialization }}</p>
+                    <p><strong>Qualification:</strong> {{ doctor.qualification }}</p>
+                    <p><strong>License Number:</strong> {{ doctor.license_number }}</p>
+
+                    <hr>
+
+                    <h5 class="text-primary">Contact Information</h5>
+                    <p><strong>Gender:</strong> {{ doctor.gender }}</p>
+                    <p><strong>Date of Birth:</strong> {{ doctor.date_of_birth|date:"d M Y" }}</p>
+                    <p><strong>Blood Group:</strong> {{ doctor.blood_group }}</p>
+                    <p><strong>Allergies:</strong> {{ doctor.allergies }}</p>
+
+                    <hr>
+
+                    <h5 class="text-primary">Personal Information</h5>
+                    <p><strong>Email:</strong> {{ doctor.user.email }}</p>
+                    <p><strong>Phone:</strong> {{ doctor.phone }}</p>
+                    <p><strong>Address:</strong> {{ doctor.address }}</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

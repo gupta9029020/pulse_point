@@ -1,0 +1,88 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold mb-0 text-primary">Prescriptions</h2>
+        <div>
+            <a href="/pharmacist-profile/" class="btn btn-outline-dark btn-sm me-2">My Profile</a>
+            <a href="/inventory/" class="btn btn-outline-primary btn-sm me-2">View Inventory</a>
+            <a href="/logout/" class="btn btn-outline-danger btn-sm">Logout</a>
+        </div>
+    </div>
+
+    <!-- Filter, Sort & Search Section -->
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <form method="GET">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Search</label>
+                        <input type="text" name="search" class="form-control" placeholder="Search Student, Doctor or Medicine" value="{{ search }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">From Date</label>
+                        <input type="date" name="date_from" class="form-control" value="{{ date_from }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">To Date</label>
+                        <input type="date" name="date_to" class="form-control" value="{{ date_to }}">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button class="btn btn-primary w-100">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Prescription Card -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {% for record in records %}
+            <div class="border-bottom py-3 d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="fw-bold text-dark mb-2">
+                        Student: {{ record.appointment.student.user.get_full_name }}
+                    </div>
+                    <div class="fw-bold text-dark mb-2">
+                        Doctor: Dr. {{ record.appointment.doctor.user.get_full_name }}
+                    </div>
+                    {% if record.pharmacist %}
+                    <div class="fw-bold text-dark mb-2">
+                        Pharmacist: {{ record.pharmacist.user.get_full_name }}
+                    </div>
+                    {% endif %}
+                    <div class="mt-3">
+                        <strong>Medicine:</strong>
+                        <span style="word-break: break-word; overflow-wrap: break-word;">
+                            {{ record.prescription }}
+                        </span>
+                    </div>
+                    <div class="text-muted small mt-1">
+                        <strong>Quantity:</strong> {{ record.prescribed_quantity }} units
+                    </div>
+                    <div class="text-muted small mt-1">
+                        Issued: {{ record.issued_at|date:"d M Y - H:i" }}
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    {% if record.dispensed %}
+                    <div class="text-success fw-semibold">✔ Medicine Dispensed</div>
+                    <div class="text-muted small">
+                        Dispensed Time: {{ record.dispensed_at|date:"d M Y - H:i" }}
+                    </div>
+                    {% elif record.not_available %}
+                    <div class="text-danger fw-semibold">❌ Medicine Not Available</div>
+                    {% else %}
+                    <a href="/dispense/{{ record.id }}/" class="btn btn-success btn-sm">Dispense</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted mb-0">No prescriptions available</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>

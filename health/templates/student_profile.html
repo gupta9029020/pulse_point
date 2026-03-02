@@ -1,0 +1,63 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{margin:0;overflow:hidden;background:#f5f7fb;}
+.center-page{height:100vh;display:flex;justify-content:center;align-items:center;}
+.profile-card{width:600px;}
+.card-body{padding:15px;}
+h2{margin-bottom:10px;}
+h5{margin-bottom:6px;}
+p{margin-bottom:4px;}
+hr{margin:10px 0;}
+.back-btn{position:absolute;top:25px;right:40px;}
+</style>
+
+<!-- Back Button -->
+<div class="back-btn">
+    <a href="/student/" class="btn btn-outline-secondary btn-sm">← Back</a>
+</div>
+
+<!-- Centered Profile -->
+<div class="center-page">
+    <div class="profile-card">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h2>Student Profile</h2>
+
+                {% if student.profile_photo %}
+                <img src="{{ student.profile_photo.url }}" class="rounded-circle mb-2 border" width="110" height="110" style="object-fit:cover">
+                {% else %}
+                <div class="mb-2">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width:110px;height:110px;font-size:30px">
+                        {{ student.user.username|first|upper }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <hr>
+
+                <div class="text-start">
+                    <h5 class="text-primary">Professional Information</h5>
+                    <p><strong>Full Name:</strong> {{ student.user.get_full_name }}</p>
+                    <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+                    <p><strong>Course:</strong> {{ student.course }}</p>
+
+                    <hr>
+
+                    <h5 class="text-primary">Contact Information</h5>
+                    <p><strong>Gender:</strong> {{ student.gender }}</p>
+                    <p><strong>Date of Birth:</strong> {{ student.date_of_birth|date:"d M Y" }}</p>
+                    <p><strong>Blood Group:</strong> {{ student.blood_group }}</p>
+                    <p><strong>Allergies:</strong> {{ student.allergies }}</p>
+
+                    <hr>
+
+                    <h5 class="text-primary">Personal Information</h5>
+                    <p><strong>Email:</strong> {{ student.user.email }}</p>
+                    <p><strong>Phone:</strong> {{ student.phone }}</p>
+                    <p><strong>Address:</strong> {{ student.address }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

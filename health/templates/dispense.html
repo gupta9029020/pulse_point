@@ -1,0 +1,40 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-5" style="max-width:600px;">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="mb-4 text-center">Dispense Medicine</h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Select Medicine</label>
+                    <select name="medicine" class="form-select" required>
+                        {% for med in medicines %}
+                        <option value="{{ med.id }}">{{ med.name }} (Stock: {{ med.stock }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" name="quantity" class="form-control" min="1" required>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success">Dispense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

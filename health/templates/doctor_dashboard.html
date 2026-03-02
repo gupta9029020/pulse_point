@@ -1,0 +1,88 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold mb-0 text-primary">Appointments</h2>
+        <div>
+            <a href="{% url 'doctor_medical_records' %}" class="btn btn-outline-primary btn-sm me-2">Medical Records</a>
+            <a href="/doctor-profile/" class="btn btn-outline-dark btn-sm me-2">My Profile</a>
+            <a href="/logout/" class="btn btn-outline-danger btn-sm">Logout</a>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="card p-3 mb-4 shadow-sm border-0 rounded-3">
+        <form method="GET">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Search</label>
+                    <input type="text" name="search" class="form-control" placeholder="Search Student or Status" value="{{ search }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">From Date</label>
+                    <input type="date" name="date_from" class="form-control" value="{{ date_from }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">To Date</label>
+                    <input type="date" name="date_to" class="form-control" value="{{ date_to }}">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-primary w-100"><i class="bi bi-search"></i> Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Appointments List -->
+    {% for appointment in appointments %}
+    <div class="card shadow-sm mb-3 border-0 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h5 class="mb-2 fw-bold">{{ appointment.student.user.get_full_name }}</h5>
+                    <p class="mb-1"><strong>Appointment Date:</strong> {{ appointment.date|date:"d M Y" }}</p>
+                    <p class="mb-1"><strong>Appointment Time:</strong> {{ appointment.time }}</p>
+                    <p class="mb-1"><strong>Raised On:</strong> {{ appointment.created_at|date:"d M Y - H:i" }}</p>
+
+                    {% if appointment.student_note %}
+                    <div class="p-2 bg-light rounded mt-2" style="max-width:320px;">
+                        <strong>Issue Description:</strong><br>
+                        {{ appointment.student_note }}
+                    </div>
+                    {% endif %}
+
+                    {% if appointment.approved_at %}
+                    <p class="mt-2 text-success"><strong>Approved On:</strong> {{ appointment.approved_at|date:"d M Y - H:i" }}</p>
+                    {% endif %}
+
+                    {% if appointment.completed_at %}
+                    <p class="text-primary"><strong>Completed On:</strong> {{ appointment.completed_at|date:"d M Y - H:i" }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="text-end">
+                    {% if appointment.status == "Pending" %}
+                        <span class="badge bg-danger mb-2">Pending</span><br>
+                        <a href="/update-status/{{ appointment.id }}/Approved/" class="btn btn-sm btn-success mt-2">Approve</a>
+
+                    {% elif appointment.status == "Approved" %}
+                        <span class="badge bg-warning text-dark mb-2">Approved</span><br>
+                        <a href="/doctor/add_record/{{ appointment.id }}/" class="btn btn-primary btn-sm mt-2">Add Prescription</a>
+
+                    {% elif appointment.status == "Completed" %}
+                        <span class="badge bg-success">Completed</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% empty %}
+    <div class="card shadow-sm border-0">
+        <div class="card-body text-muted text-center">No appointments found.</div>
+    </div>
+    {% endfor %}
+
+</div>
